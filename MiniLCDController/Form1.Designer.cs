@@ -38,6 +38,7 @@
             this.btn_connect = new System.Windows.Forms.Button();
             this.pl_conn = new System.Windows.Forms.Panel();
             this.pl_main = new System.Windows.Forms.Panel();
+            this.btn_toBl = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.preview_box)).BeginInit();
             this.pl_conn.SuspendLayout();
             this.pl_main.SuspendLayout();
@@ -47,7 +48,7 @@
             // 
             this.btn_capture.Location = new System.Drawing.Point(169, 74);
             this.btn_capture.Name = "btn_capture";
-            this.btn_capture.Size = new System.Drawing.Size(97, 23);
+            this.btn_capture.Size = new System.Drawing.Size(164, 23);
             this.btn_capture.TabIndex = 0;
             this.btn_capture.Text = "开始窗口捕捉";
             this.btn_capture.UseVisualStyleBackColor = true;
@@ -73,7 +74,7 @@
             // checkBox1
             // 
             this.checkBox1.AutoSize = true;
-            this.checkBox1.Location = new System.Drawing.Point(169, 17);
+            this.checkBox1.Location = new System.Drawing.Point(169, 23);
             this.checkBox1.Name = "checkBox1";
             this.checkBox1.Size = new System.Drawing.Size(72, 16);
             this.checkBox1.TabIndex = 3;
@@ -84,7 +85,7 @@
             // checkBox2
             // 
             this.checkBox2.AutoSize = true;
-            this.checkBox2.Location = new System.Drawing.Point(247, 17);
+            this.checkBox2.Location = new System.Drawing.Point(247, 23);
             this.checkBox2.Name = "checkBox2";
             this.checkBox2.Size = new System.Drawing.Size(72, 16);
             this.checkBox2.TabIndex = 4;
@@ -131,6 +132,7 @@
             // 
             // pl_main
             // 
+            this.pl_main.Controls.Add(this.btn_toBl);
             this.pl_main.Controls.Add(this.label1);
             this.pl_main.Controls.Add(this.preview_box);
             this.pl_main.Controls.Add(this.btn_capture);
@@ -141,6 +143,17 @@
             this.pl_main.Name = "pl_main";
             this.pl_main.Size = new System.Drawing.Size(336, 101);
             this.pl_main.TabIndex = 9;
+            // 
+            // btn_toBl
+            // 
+            this.btn_toBl.Location = new System.Drawing.Point(169, 45);
+            this.btn_toBl.Name = "btn_toBl";
+            this.btn_toBl.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.btn_toBl.Size = new System.Drawing.Size(164, 23);
+            this.btn_toBl.TabIndex = 5;
+            this.btn_toBl.Text = "启动到Bootloader";
+            this.btn_toBl.UseVisualStyleBackColor = true;
+            this.btn_toBl.Click += new System.EventHandler(this.btn_toBlDfu_Click);
             // 
             // Form1
             // 
@@ -176,6 +189,7 @@
         private System.Windows.Forms.Button btn_connect;
         private System.Windows.Forms.Panel pl_conn;
         private System.Windows.Forms.Panel pl_main;
+        private System.Windows.Forms.Button btn_toBl;
     }
 }
 

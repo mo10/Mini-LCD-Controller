@@ -11,6 +11,7 @@ namespace MiniLCDController
 {
     class UsbCmd
     {
+        private const int MAX_TIMEOUT = 200;
         private const int CMD_BUF_HEAD = 0x22;
         private const int CMD_BUF_END = 0x33;
 
@@ -24,7 +25,8 @@ namespace MiniLCDController
             USB_CMD_SET_SCREENCOLOR,
             USB_CMD_DRAWIMAGE,
             USB_CMD_PRINTTEXT,
-            USB_CMD_FILLRECT
+            USB_CMD_FILLRECT,
+            USB_CMD_TOBOOTLOADER
         }
         public enum USB_CMD_RET
         {
@@ -62,8 +64,8 @@ namespace MiniLCDController
             buf.length = length;
             buf.data = data;
             int a;
-            ErrorCode ec = writer.Transfer(getBytes(buf), 0, 9, 3000, out a);
-            if (ec != ErrorCode.None) throw new Exception(UsbDevice.LastErrorString);
+            ErrorCode ec = writer.Transfer(getBytes(buf), 0, 9, MAX_TIMEOUT, out a);
+            //if (ec != ErrorCode.None) throw new Exception(UsbDevice.LastErrorString);
         }
         /// <summary>
         /// 发送图片
@@ -91,15 +93,15 @@ namespace MiniLCDController
                     //最后一个数据包
                     int last_len = data_len % 64;
                     int a;
-                    ErrorCode ec = writer.Transfer(data, data_offset, last_len, 3000, out a);
-                    if (ec != ErrorCode.None) throw new Exception(UsbDevice.LastErrorString);
+                    ErrorCode ec = writer.Transfer(data, data_offset, last_len, MAX_TIMEOUT, out a);
+                    //if (ec != ErrorCode.None) throw new Exception(UsbDevice.LastErrorString);
                 }
                 else
                 {
                     //发送数据
                     int a;
-                    ErrorCode ec = writer.Transfer(data, data_offset, max_len, 3000, out a);
-                    if (ec != ErrorCode.None) throw new Exception(UsbDevice.LastErrorString);
+                    ErrorCode ec = writer.Transfer(data, data_offset, max_len, MAX_TIMEOUT, out a);
+                    //if (ec != ErrorCode.None) throw new Exception(UsbDevice.LastErrorString);
                     data_offset += max_len;
                 }
             }
@@ -112,6 +114,14 @@ namespace MiniLCDController
         {
             //默认刷全屏
             sendImage(data, 0, 0, ST7735_WIDTH, ST7735_HEIGHT);
+        }
+        /// <summary>
+        /// 使stm32进入Bootloader
+        /// </summary>
+        public void rebootToBootloader()
+        {
+            byte[] data = new byte[4] {0,0,0,0};
+            sendCommand(USB_CMD.USB_CMD_TOBOOTLOADER, 0, data);
         }
         /// <summary>
         /// 将 USB_CMD_BUF 转换成 byte数组

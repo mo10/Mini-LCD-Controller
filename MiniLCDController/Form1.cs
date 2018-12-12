@@ -47,7 +47,8 @@ namespace MiniLCDController
         Thread thread = null;
         UsbDevice inUsingDevce = null;
         IDeviceNotifier UsbDeviceNotifier = DeviceNotifier.OpenDeviceNotifier();
-
+        UsbEndpointWriter writer = null;
+        UsbCmd usbcmd = null;
         public Form1()
         {
             InitializeComponent();
@@ -91,10 +92,10 @@ namespace MiniLCDController
         /// </summary>
         private void CaptureFrame()
         {
-            UsbEndpointWriter writer = inUsingDevce.OpenEndpointWriter(WriteEndpointID.Ep02);
+            
             Bitmap bitmap = new Bitmap(160, 80, PixelFormat.Format16bppRgb565);
             Size size = bitmap.Size;
-            UsbCmd usbcmd = new UsbCmd(writer);
+            
 
             using (Graphics graphics = Graphics.FromImage(bitmap))
             {
@@ -115,7 +116,8 @@ namespace MiniLCDController
                                 return;
                         }
                         //向usb设备发送图片
-                        usbcmd.sendImage(byteTurn(imageToByte(bitmap)));
+                        lock(usbcmd)
+                            usbcmd.sendImage(byteTurn(imageToByte(bitmap)));
                         //刷新预览框内容
                         preview_box.Invoke(new Action(() =>
                         {
@@ -185,7 +187,9 @@ namespace MiniLCDController
                 // Claim interface #0.
                 wholeUsbDevice.ClaimInterface(0);
             }
-            
+            writer = inUsingDevce.OpenEndpointWriter(WriteEndpointID.Ep02);
+            usbcmd = new UsbCmd(writer);
+
         }
         /// <summary>
         /// 连接调用
@@ -202,6 +206,8 @@ namespace MiniLCDController
         /// </summary>
         private void disconnected()
         {
+            
+
             pl_conn.Enabled = true;
             pl_main.Enabled = false;
             
@@ -214,11 +220,16 @@ namespace MiniLCDController
             {
                 thread.Abort();
             }
+            writer = null;
+            usbcmd = null;
             btn_connect.Text = "连接设备";
             btn_capture.Text = "开始窗口捕捉";
-
-            inUsingDevce.Close();
-            inUsingDevce = null;
+            if (inUsingDevce != null)
+            {
+                inUsingDevce.Close();
+                inUsingDevce = null;
+            }
+            
         }
         /// <summary>
         /// 窗体加载事件
@@ -280,6 +291,13 @@ namespace MiniLCDController
             {
                 disconnected();
             }
+        }
+
+        private void btn_toBlDfu_Click(object sender, EventArgs e)
+        {
+            lock (usbcmd)
+                usbcmd.rebootToBootloader();
+            disconnected();
         }
     }
 }
