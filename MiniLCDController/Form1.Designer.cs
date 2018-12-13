@@ -39,6 +39,7 @@
             this.pl_conn = new System.Windows.Forms.Panel();
             this.pl_main = new System.Windows.Forms.Panel();
             this.btn_toBl = new System.Windows.Forms.Button();
+            this.lb_fps = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.preview_box)).BeginInit();
             this.pl_conn.SuspendLayout();
             this.pl_main.SuspendLayout();
@@ -132,6 +133,7 @@
             // 
             // pl_main
             // 
+            this.pl_main.Controls.Add(this.lb_fps);
             this.pl_main.Controls.Add(this.btn_toBl);
             this.pl_main.Controls.Add(this.label1);
             this.pl_main.Controls.Add(this.preview_box);
@@ -154,6 +156,15 @@
             this.btn_toBl.Text = "启动到Bootloader";
             this.btn_toBl.UseVisualStyleBackColor = true;
             this.btn_toBl.Click += new System.EventHandler(this.btn_toBlDfu_Click);
+            // 
+            // lb_fps
+            // 
+            this.lb_fps.AutoSize = true;
+            this.lb_fps.Location = new System.Drawing.Point(169, 8);
+            this.lb_fps.Name = "lb_fps";
+            this.lb_fps.Size = new System.Drawing.Size(59, 12);
+            this.lb_fps.TabIndex = 6;
+            this.lb_fps.Text = "当前帧数:";
             // 
             // Form1
             // 
@@ -190,6 +201,7 @@
         private System.Windows.Forms.Panel pl_conn;
         private System.Windows.Forms.Panel pl_main;
         private System.Windows.Forms.Button btn_toBl;
+        private System.Windows.Forms.Label lb_fps;
     }
 }
 

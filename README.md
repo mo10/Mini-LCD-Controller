@@ -1,2 +1,3 @@
 # Mini-LCD-Controller
-A C# application for my stm32
+[![Build status](https://ci.appveyor.com/api/projects/status/kwia77eg8ecf4dvo?svg=true)](https://ci.appveyor.com/project/mo10/mini-lcd-controller)
+A C# application for [STM32 Mini LCD](https://github.com/mo10/STM32-Mini-LCD).

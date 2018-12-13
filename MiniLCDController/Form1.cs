@@ -95,8 +95,10 @@ namespace MiniLCDController
             
             Bitmap bitmap = new Bitmap(160, 80, PixelFormat.Format16bppRgb565);
             Size size = bitmap.Size;
-            
 
+            DateTime beforDT = System.DateTime.Now;
+
+            int frame = 0;
             using (Graphics graphics = Graphics.FromImage(bitmap))
             {
                 while (true)
@@ -116,14 +118,28 @@ namespace MiniLCDController
                                 return;
                         }
                         //向usb设备发送图片
-                        lock(usbcmd)
+                        lock (usbcmd)
+                        {
                             usbcmd.sendImage(byteTurn(imageToByte(bitmap)));
+                            frame++;
+                        }
                         //刷新预览框内容
                         preview_box.Invoke(new Action(() =>
                         {
                             preview_box.Image = bitmap;
                         }));
-
+                        DateTime afterDT = System.DateTime.Now;
+                        TimeSpan ts = afterDT.Subtract(beforDT);
+                        if (ts.TotalSeconds >= 1)
+                        {
+                            lb_fps.Invoke(new Action(() =>
+                            {
+                                lb_fps.Text = "当前帧数:"+(int)(frame * 1.0 / ts.TotalMilliseconds * 1000);
+                            }));
+                            frame = 0;
+                            beforDT = System.DateTime.Now;
+                        }
+                        
                     }
                 }
             }
