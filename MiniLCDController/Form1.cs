@@ -93,7 +93,10 @@ namespace MiniLCDController
         private void CaptureFrame()
         {
             
-            Bitmap bitmap = new Bitmap(160, 80, PixelFormat.Format16bppRgb565);
+            Graphics g = Graphics.FromHwnd(IntPtr.Zero);
+            float factor = g.DpiX / 96;
+
+            Bitmap bitmap = new Bitmap((int)(160* factor), (int)(80* factor), PixelFormat.Format16bppRgb565);
             Size size = bitmap.Size;
 
             DateTime beforDT = System.DateTime.Now;
